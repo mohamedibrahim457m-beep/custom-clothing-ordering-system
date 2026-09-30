@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATELIER BESPOKE | Luxury Custom Clothing & Made-To-Measure Ordering</title>
+  <meta name="description" content="Experience sartorial perfection with Atelier Bespoke. Order custom-tailored suits, tuxedos, dress shirts, and fine evening garments crafted to your exact measurements.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✂️</text></svg>">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       SITE HEADER / NAVBAR
+       ========================================================================== -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-logo" id="brand-logo-link">
+        <div class="brand-logo-icon">
+          <!-- Scissors / Bespoke Needle SVG -->
+          <svg viewBox="0 0 24 24">
+            <circle cx="6" cy="6" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+            <circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+            <line x1="20" y1="4" x2="8.12" y2="15.88" stroke="currentColor" stroke-width="2"/>
+            <line x1="14.47" y1="14.48" x2="20" y2="20" stroke="currentColor" stroke-width="2"/>
+            <line x1="8.12" y1="8.12" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">ATELIER BESPOKE</span>
+          <span class="brand-subtitle">Savile Row Sartorial</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#collections" class="nav-link active" id="nav-collections-link" onclick="App.switchView('shop')">Collections</a></li>
+          <li><a href="#the-craft" class="nav-link" id="nav-craft-link" onclick="App.switchView('shop')">The Craft</a></li>
+          <li><a href="#tracking-section" class="nav-link" id="nav-tracking-link" onclick="App.switchView('shop')">Track Order</a></li>
+          <li><a href="javascript:void(0)" id="nav-measurements-link" class="nav-link" style="display:none;" onclick="App.openMeasurementsModal()">My Fit Profiles</a></li>
+          <li><a href="javascript:void(0)" id="nav-admin-link" class="nav-link portal-link" style="display:none;" onclick="App.switchView('admin')">👑 Admin Console</a></li>
+          <li><a href="javascript:void(0)" id="nav-tailor-link" class="nav-link portal-link tailor-link" style="display:none;" onclick="App.switchView('tailor')">✂️ Tailor Bay</a></li>
+          <li><a href="javascript:void(0)" id="nav-store-link" class="nav-link" style="display:none;" onclick="App.switchView('shop')">← Back to Storefront</a></li>
+        </ul>
+      </nav>
+
+      <!-- Right Action Items -->
+      <div class="nav-actions">
+        <!-- Live Spring Backend Status Pill -->
+        <div class="api-status-pill" id="api-status-pill" title="Connecting to Spring Boot REST backend...">
+          <span class="status-dot"></span>
+          <span>API Connecting...</span>
+        </div>
+
+        <!-- Cart Button Trigger -->
+        <button class="cart-trigger-btn" id="cart-trigger-btn" aria-label="Shopping Cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-badge" id="cart-badge-count" style="display: none;">0</span>
+        </button>
+
+        <!-- User Authentication Button / Profile Menu -->
+        <button class="auth-btn" id="nav-auth-btn" data-action="open-auth">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <span>Sign In</span>
+        </button>
+
+        <!-- Logged In User Pill Dropdown -->
+        <div class="user-profile-menu" id="nav-user-menu" style="display: none;" onclick="App.handleUserMenuClick()">
+          <div class="user-avatar" id="nav-user-avatar">DS</div>
+          <div style="display: flex; flex-direction: column; text-align: left; line-height: 1.1;">
+            <span class="user-name-label" id="nav-user-name">David</span>
+            <span id="nav-user-role-badge" style="font-size: 0.65rem; color: var(--gold-light); font-weight: 600; text-transform: uppercase;">CUSTOMER</span>
+          </div>
+          <button id="btn-logout" title="Sign Out" style="color:var(--text-dim); margin-left: 6px; background:transparent; border:none; cursor:pointer;" onclick="event.stopPropagation(); App.handleLogout();">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       CUSTOMER STOREFRONT VIEW
+       ========================================================================== -->
+  <div id="customer-store-view">
+  <!-- ==========================================================================
+       HERO SECTION
+       ========================================================================== -->
+  <section class="hero-section">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span>★</span>
+          <span>Bespoke Handcrafted Luxury</span>
+        </div>
+        <h1 class="hero-title">
+          Elegance Tailored <br>
+          <span class="gold-gradient-text">Exclusively For You</span>
+        </h1>
+        <p class="hero-description">
+          Fine European cloth, sculpted canvassing, and bespoke precision. Select your fabrics, specify exact measurements, and let master tailors craft garments that fit flawlessly.
+        </p>
+        <div class="hero-cta-group">
+          <a href="#collections" class="btn-primary">
+            <span>Explore Collections</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#tracking-section" class="btn-secondary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Track Bespoke Order</span>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat-item">
+            <span class="stat-value">100%</span>
+            <span class="stat-label">Custom Made-to-Measure</span>
+          </div>
+          <div class="hero-stat-item">
+            <span class="stat-value">Super 130s+</span>
+            <span class="stat-label">Italian Merino Wool</span>
+          </div>
+          <div class="hero-stat-item">
+            <span class="stat-value">7-10 Days</span>
+            <span class="stat-label">Handcrafted Delivery</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual Showcase -->
+      <div class="hero-showcase">
+        <div class="hero-card-wrapper">
+          <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80" alt="Bespoke Italian Suit" class="hero-main-img">
+          
+          <!-- Floating Badge Top Left -->
+          <div class="floating-badge badge-top-left">
+            <div class="floating-icon">✂️</div>
+            <div>
+              <div class="floating-text-title">Savile Row Cut</div>
+              <div class="floating-text-sub">Full Canvas Drape</div>
+            </div>
+          </div>
+
+          <!-- Floating Badge Bottom Right -->
+          <div class="floating-badge badge-bottom-right">
+            <div class="floating-icon">🧵</div>
+            <div>
+              <div class="floating-text-title">Dedicated Tailor</div>
+              <div class="floating-text-sub">Assigned Per Order</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       HOW BESPOKE WORKS (THE CRAFT)
+       ========================================================================== -->
+  <section class="craft-process-section" id="the-craft">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">The Art of Sartorial Customization</span>
+        <h2 class="section-title">How Your Bespoke Garment is Born</h2>
+        <p class="section-subtitle">A seamless journey from Italian cloth mills to an immaculate silhouette cut just for you.</p>
+      </div>
+
+      <div class="process-grid">
+        <div class="process-step-card">
+          <span class="step-number">01</span>
+          <div class="step-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path>
+              <line x1="16" y1="8" x2="2" y2="22"></line>
+              <line x1="17.5" y1="15" x2="9" y2="15"></line>
+            </svg>
+          </div>
+          <h3 class="step-title">Select Cloth & Style</h3>
+          <p class="step-desc">Choose from handcrafted two-piece suits, Egyptian cotton shirts, and Belgian linens with curated color palettes.</p>
+        </div>
+
+        <div class="process-step-card">
+          <span class="step-number">02</span>
+          <div class="step-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3 class="step-title">Personalize Details</h3>
+          <p class="step-desc">Select peak or notch lapels, horn or mother-of-pearl buttons, pick stitching, double vents, and custom embroidered monograms.</p>
+        </div>
+
+        <div class="process-step-card">
+          <span class="step-number">03</span>
+          <div class="step-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <h3 class="step-title">Precise Measurements</h3>
+          <p class="step-desc">Provide your exact chest, waist, shoulder, sleeve, and inseam dimensions. Save multiple fit profiles for future orders.</p>
+        </div>
+
+        <div class="process-step-card">
+          <span class="step-number">04</span>
+          <div class="step-icon-box">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+          </div>
+          <h3 class="step-title">Hand-Tailored & Delivered</h3>
+          <p class="step-desc">A certified master tailor handles cutting and canvassing. Track real-time stitching status and receive doorstep delivery.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PRODUCT CATALOG & FILTERING
+       ========================================================================== -->
+  <section class="catalog-section" id="collections">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Made-To-Order Collection</span>
+        <h2 class="section-title">The Atelier Showcase</h2>
+        <p class="section-subtitle">Every piece is fully customizable with our interactive customizer.</p>
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="catalog-controls">
+        <div class="catalog-search-row">
+          <!-- Search Bar -->
+          <div class="search-input-wrapper">
+            <span class="search-input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input type="text" id="catalog-search-input" class="search-input" placeholder="Search bespoke suits, shirts, fabrics, colors...">
+          </div>
+
+          <!-- Measurement Guide Trigger -->
+          <button class="btn-secondary" id="btn-measurement-guide">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>Fitting & Measurement Guide</span>
+          </button>
+        </div>
+
+        <!-- Category Filter Tabs -->
+        <div class="category-tabs-container" id="category-tabs-container">
+          <button class="category-tab-btn active" data-cat-id="all">All Bespoke</button>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" id="products-grid">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       ORDER TRACKING SECTION
+       ========================================================================== -->
+  <section class="tracking-section" id="tracking-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Real-Time Atelier Transparency</span>
+        <h2 class="section-title">Track Your Bespoke Order</h2>
+        <p class="section-subtitle">Follow your garment's journey through cutting, canvassing, tailoring, and delivery.</p>
+      </div>
+
+      <div class="tracking-card-container">
+        <!-- Search Bar -->
+        <form class="tracking-search-bar" id="tracking-form">
+          <input type="text" id="tracking-number-input" class="tracking-input" placeholder="Enter Tracking # (e.g. CCO-2026-BESPOKE1)" required>
+          <button type="submit" class="btn-track" id="btn-search-tracking">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Track</span>
+          </button>
+        </form>
+
+        <!-- Quick Demo Orders -->
+        <div class="quick-demo-orders">
+          <span>Demonstration Orders:</span>
+          <button type="button" class="quick-order-chip" data-tracking="CCO-2026-BESPOKE1">
+            CCO-2026-BESPOKE1 (David's Navy Suit)
+          </button>
+        </div>
+
+        <!-- Logged-in Customer Orders Container -->
+        <div id="user-recent-orders-list"></div>
+
+        <!-- Tracking Result Box -->
+        <div class="tracking-result-box" id="tracking-result-box">
+          <div class="tracking-header-info">
+            <div>
+              <span style="font-size: 0.76rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 4px;">Tracking Number</span>
+              <span class="tracking-number-badge" id="tracked-tracking-num">CCO-2026-BESPOKE1</span>
+            </div>
+            <div>
+              <span class="status-pill pending" id="tracked-status-pill">Under Stitching</span>
+            </div>
+          </div>
+
+          <!-- Animated Stepper Progress Bar -->
+          <div class="order-stepper">
+            <div class="stepper-progress-fill" id="stepper-progress-fill" style="width: 20%;"></div>
+
+            <div class="step-node" id="step-node-pending">
+              <div class="step-circle">1</div>
+              <span class="step-label">Order Placed</span>
+            </div>
+            <div class="step-node" id="step-node-confirmed">
+              <div class="step-circle">2</div>
+              <span class="step-label">Confirmed</span>
+            </div>
+            <div class="step-node" id="step-node-assigned">
+              <div class="step-circle">3</div>
+              <span class="step-label">Tailor Assigned</span>
+            </div>
+            <div class="step-node" id="step-node-under_stitching">
+              <div class="step-circle">4</div>
+              <span class="step-label">Under Stitching</span>
+            </div>
+            <div class="step-node" id="step-node-ready_for_delivery">
+              <div class="step-circle">5</div>
+              <span class="step-label">Ready for Dispatch</span>
+            </div>
+            <div class="step-node" id="step-node-delivered">
+              <div class="step-circle">6</div>
+              <span class="step-label">Delivered</span>
+            </div>
+          </div>
+
+          <!-- Metadata Breakdown Grid -->
+          <div class="tracking-meta-grid">
+            <div>
+              <div class="meta-field-label">Order Date</div>
+              <div class="meta-field-val" id="meta-order-date">Sep 25, 2026</div>
+            </div>
+            <div>
+              <div class="meta-field-label">Estimated Delivery</div>
+              <div class="meta-field-val" id="meta-delivery-date" style="color: var(--gold-light);">Oct 02, 2026</div>
+            </div>
+            <div>
+              <div class="meta-field-label">Grand Total</div>
+              <div class="meta-field-val" id="meta-total-amount">₹28,999.00</div>
+            </div>
+            <div>
+              <div class="meta-field-label">Customer Name</div>
+              <div class="meta-field-val" id="meta-customer-name">David Sterling</div>
+            </div>
+            <div>
+              <div class="meta-field-label">Contact Phone</div>
+              <div class="meta-field-val" id="meta-contact-phone">+1 (555) 018-7711</div>
+            </div>
+            <div id="meta-assigned-tailor-box">
+              <div class="meta-field-label">Assigned Master Tailor</div>
+              <div class="meta-field-val" id="meta-assigned-tailor-name" style="color: #60a5fa;">Marcus Vance</div>
+            </div>
+            <div style="grid-column: 1/-1;">
+              <div class="meta-field-label">Shipping Address</div>
+              <div class="meta-field-val" id="meta-shipping-address">742 Evergreen Terrace, Springfield, IL 62704</div>
+            </div>
+          </div>
+
+          <!-- Tailor Notes Callout -->
+          <div class="tailor-note-callout" id="tailor-notes-callout">
+            <div class="tailor-note-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>Master Tailor Workshop Log</span>
+            </div>
+            <p class="tailor-note-text" id="tailor-notes-text">"Fabric inspected and cold-steamed. Canvassing basted, shoulder pads shaped."</p>
+          </div>
+
+          <!-- Ordered Items Breakdown -->
+          <h4 style="font-family: var(--font-heading); margin-bottom: 1rem; color: var(--gold-light);">Tailored Garments in this Order</h4>
+          <div class="tracked-items-list" id="tracked-items-container"></div>
+
+          <!-- Cancel Order Button -->
+          <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+            <button class="btn-secondary" id="btn-cancel-tracked-order" style="color: var(--accent-danger); border-color: rgba(239, 68, 68, 0.3); display: none;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+              </svg>
+              <span>Cancel This Order</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </div> <!-- /#customer-store-view -->
+
+  <!-- ==========================================================================
+       ADMIN MANAGEMENT PORTAL
+       ========================================================================== -->
+  <div id="admin-portal-view" style="display: none;" class="portal-section container">
+    <div class="portal-header">
+      <div class="portal-header-content">
+        <div class="portal-header-info">
+          <div class="portal-role-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span>Master Administration Console</span>
+          </div>
+          <h2 class="portal-title">Atelier Operations & Logistics</h2>
+          <p class="portal-subtitle">Production scheduling, artisan tailor allocation, catalog curation, and customer fit records.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <button class="btn-secondary btn-sm" onclick="App.switchView('shop')">
+            <span>View Bespoke Storefront</span>
+          </button>
+          <button class="btn-primary btn-sm" onclick="App.loadAdminData()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <span>Refresh Portal</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Navigation Tabs -->
+    <div class="portal-nav-tabs">
+      <button class="portal-tab-btn active" id="btn-admin-tab-dashboard" onclick="App.switchAdminTab('dashboard')">
+        <span>📊 Dashboard</span>
+      </button>
+      <button class="portal-tab-btn" id="btn-admin-tab-orders" onclick="App.switchAdminTab('orders')">
+        <span>📦 All Orders</span>
+        <span class="tab-count-badge" id="admin-orders-count-badge">0</span>
+      </button>
+      <button class="portal-tab-btn" id="btn-admin-tab-products" onclick="App.switchAdminTab('products')">
+        <span>👔 Garment Catalog</span>
+        <span class="tab-count-badge" id="admin-products-count-badge">0</span>
+      </button>
+      <button class="portal-tab-btn" id="btn-admin-tab-customers" onclick="App.switchAdminTab('customers')">
+        <span>👥 Customer Directory</span>
+        <span class="tab-count-badge" id="admin-customers-count-badge">0</span>
+      </button>
+    </div>
+
+    <!-- Tab 1: Dashboard -->
+    <div id="admin-tab-content-dashboard">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon-box">💰</div>
+          <div class="metric-label">Total Revenue</div>
+          <div class="metric-val gold" id="metric-total-revenue">₹0.00</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon-box">📦</div>
+          <div class="metric-label">Total Orders</div>
+          <div class="metric-val" id="metric-total-orders">0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon-box">⏳</div>
+          <div class="metric-label">Pending / Unassigned</div>
+          <div class="metric-val" style="color: #fbbf24;" id="metric-pending-orders">0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon-box">✂️</div>
+          <div class="metric-label">In Tailoring Bay</div>
+          <div class="metric-val" style="color: #fb923c;" id="metric-stitching-orders">0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon-box">👔</div>
+          <div class="metric-label">Active Garments</div>
+          <div class="metric-val" id="metric-total-products">0</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-icon-box">👥</div>
+          <div class="metric-label">Registered Patrons</div>
+          <div class="metric-val" id="metric-total-customers">0</div>
+        </div>
+      </div>
+
+      <!-- Tailor Bays Status Grid -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2rem;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--gold-light); margin-bottom: 1rem;">Artisan Tailor Bays Workload</h3>
+        <div id="admin-tailor-workload-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;"></div>
+      </div>
+
+      <!-- Recent Orders Quick Preview -->
+      <div style="background: var(--bg-card); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: var(--gold-light);">Recent Production Orders</h3>
+          <button class="btn-secondary btn-sm" onclick="App.switchAdminTab('orders')">View All in Orders Tab &rarr;</button>
+        </div>
+        <div id="admin-recent-orders-preview"></div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Orders -->
+    <div id="admin-tab-content-orders" style="display: none;">
+      <div class="filter-row">
+        <div class="filter-chips" id="admin-order-status-filters">
+          <button class="filter-chip active" data-status="ALL" onclick="App.filterAdminOrders('ALL')">All Orders</button>
+          <button class="filter-chip" data-status="PENDING" onclick="App.filterAdminOrders('PENDING')">Pending</button>
+          <button class="filter-chip" data-status="CONFIRMED" onclick="App.filterAdminOrders('CONFIRMED')">Confirmed</button>
+          <button class="filter-chip" data-status="ASSIGNED" onclick="App.filterAdminOrders('ASSIGNED')">Assigned</button>
+          <button class="filter-chip" data-status="UNDER_STITCHING" onclick="App.filterAdminOrders('UNDER_STITCHING')">Under Stitching</button>
+          <button class="filter-chip" data-status="READY_FOR_DELIVERY" onclick="App.filterAdminOrders('READY_FOR_DELIVERY')">Ready for Delivery</button>
+          <button class="filter-chip" data-status="DELIVERED" onclick="App.filterAdminOrders('DELIVERED')">Delivered</button>
+          <button class="filter-chip" data-status="CANCELLED" onclick="App.filterAdminOrders('CANCELLED')">Cancelled</button>
+        </div>
+        <input type="text" class="portal-input" id="admin-order-search" placeholder="Search tracking #, patron..." oninput="App.searchAdminOrders(this.value)" style="min-width: 250px;">
+      </div>
+      <div id="admin-orders-list-container"></div>
+    </div>
+
+    <!-- Tab 3: Products -->
+    <div id="admin-tab-content-products" style="display: none;">
+      <div class="filter-row">
+        <div style="display: flex; gap: 0.75rem; align-items: center;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--gold-light);">Garment Catalog Management</h3>
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <input type="text" class="portal-input" id="admin-product-search" placeholder="Search garment..." oninput="App.searchAdminProducts(this.value)">
+          <button class="btn-primary btn-sm" onclick="App.openAddProductModal()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Add New Garment</span>
+          </button>
+        </div>
+      </div>
+      <div id="admin-products-table-container" class="portal-table-container"></div>
+    </div>
+
+    <!-- Tab 4: Customers -->
+    <div id="admin-tab-content-customers" style="display: none;">
+      <div class="filter-row">
+        <h3 style="font-family: var(--font-heading); font-size: 1.25rem; color: var(--gold-light);">Registered Patrons & Bespoke Fit Profiles</h3>
+        <input type="text" class="portal-input" id="admin-customer-search" placeholder="Search patron name, email..." oninput="App.searchAdminCustomers(this.value)" style="min-width: 250px;">
+      </div>
+      <div id="admin-customers-table-container" class="portal-table-container"></div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       TAILOR WORKSHOP PORTAL
+       ========================================================================== -->
+  <div id="tailor-portal-view" style="display: none;" class="portal-section container">
+    <div class="portal-header">
+      <div class="portal-header-content">
+        <div class="portal-header-info">
+          <div class="portal-role-tag" style="color: #60a5fa;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+            <span>Artisan Tailoring Workshop Bay</span>
+          </div>
+          <h2 class="portal-title" id="tailor-workshop-name">Master Tailor Workshop Bay</h2>
+          <p class="portal-subtitle">Handcrafting bespoke luxury garments to patrons' exact anatomical measurements.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <button class="btn-secondary btn-sm" onclick="App.switchView('shop')">
+            <span>View Bespoke Storefront</span>
+          </button>
+          <button class="btn-primary btn-sm" onclick="App.loadTailorData()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <span>Refresh Queue</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tailor Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">✂️</div>
+        <div class="metric-label">Total Assigned Garments</div>
+        <div class="metric-val" id="metric-tailor-total">0</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: rgba(234, 88, 12, 0.1); border-color: rgba(234, 88, 12, 0.3);">🪡</div>
+        <div class="metric-label">Currently Under Stitching</div>
+        <div class="metric-val" style="color: #fb923c;" id="metric-tailor-stitching">0</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: rgba(14, 165, 233, 0.1); border-color: rgba(14, 165, 233, 0.3);">✨</div>
+        <div class="metric-label">Ready for Fitting / Dispatch</div>
+        <div class="metric-val" style="color: #38bdf8;" id="metric-tailor-ready">0</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">🏆</div>
+        <div class="metric-label">Delivered Garments</div>
+        <div class="metric-val" style="color: #34d399;" id="metric-tailor-delivered">0</div>
+      </div>
+    </div>
+
+    <!-- Tailor Orders Queue -->
+    <div class="filter-row">
+      <div class="filter-chips" id="tailor-order-status-filters">
+        <button class="filter-chip active" data-status="ALL" onclick="App.filterTailorOrders('ALL')">All Assigned</button>
+        <button class="filter-chip" data-status="ASSIGNED" onclick="App.filterTailorOrders('ASSIGNED')">New Allocations</button>
+        <button class="filter-chip" data-status="UNDER_STITCHING" onclick="App.filterTailorOrders('UNDER_STITCHING')">Under Stitching</button>
+        <button class="filter-chip" data-status="READY_FOR_DELIVERY" onclick="App.filterTailorOrders('READY_FOR_DELIVERY')">Ready for Dispatch</button>
+        <button class="filter-chip" data-status="DELIVERED" onclick="App.filterTailorOrders('DELIVERED')">Completed</button>
+      </div>
+    </div>
+    <div id="tailor-orders-list-container"></div>
+  </div>
+
+  <!-- ==========================================================================
+       PRODUCT CUSTOMIZER MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="customizer-modal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <div>
+          <span class="section-tag" id="customizer-category">Suits & Tuxedos</span>
+          <h2 class="modal-title" id="customizer-modal-title">Customize Bespoke Garment</h2>
+        </div>
+        <button class="modal-close-btn" id="customizer-modal-close" aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="customizer-grid">
+          <!-- Left Column: Visual Preview -->
+          <div class="customizer-preview-col">
+            <img src="" alt="Customizing Garment" class="customizer-preview-img" id="customizer-img">
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;" id="customizer-desc"></p>
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1rem; margin-top: 0.5rem;">
+              <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-dim); display: block;">Base Sartorial Price</span>
+              <span style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 700; color: var(--gold-light);" id="customizer-price">₹0.00</span>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Selectors -->
+          <div class="customizer-config-col">
+            <!-- 1. Size Selection -->
+            <div>
+              <div class="config-section-title">
+                <span>1. Select Size / Cut</span>
+              </div>
+              <div class="options-chips-group" id="customizer-sizes-container"></div>
+            </div>
+
+            <!-- 2. Color Selection -->
+            <div>
+              <div class="config-section-title">
+                <span>2. Select Colorway</span>
+              </div>
+              <div class="color-swatches-group" id="customizer-colors-container"></div>
+            </div>
+
+            <!-- 3. Fabric Selection -->
+            <div>
+              <div class="config-section-title">
+                <span>3. Select Premium Cloth</span>
+              </div>
+              <div class="fabric-cards-group" id="customizer-fabrics-container"></div>
+            </div>
+
+            <!-- 4. Custom Measurements -->
+            <div>
+              <div class="config-section-title">
+                <span>4. Bespoke Fit & Measurements</span>
+                <a href="javascript:void(0)" onclick="App.openModal('measurement-guide-modal')" style="font-size: 0.72rem; color: var(--gold-primary); text-transform: none; text-decoration: underline;">Fit Guide</a>
+              </div>
+              <div class="measurement-select-box">
+                <select id="measurement-profile-select">
+                  <option value="">-- Standard Size (No Measurement Profile) --</option>
+                  <option value="NEW">+ Enter Custom Measurements</option>
+                </select>
+
+                <!-- Collapsible inline custom measurement fields -->
+                <div class="custom-measurements-accordion" id="new-measurement-accordion" style="display: none;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <span style="font-size: 0.82rem; font-weight: 600; color: var(--gold-light);">Input Your Exact Measurements</span>
+                    <select id="new-m-unit" style="width: auto; padding: 0.2rem 0.5rem; font-size: 0.75rem;">
+                      <option value="inches">Inches (in)</option>
+                      <option value="cm">Centimeters (cm)</option>
+                    </select>
+                  </div>
+                  <div class="measurement-field" style="margin-bottom: 0.5rem;">
+                    <label>Profile Name</label>
+                    <input type="text" id="new-m-name" placeholder="e.g. My Executive Suit Fit" value="Custom Fit">
+                  </div>
+                  <div class="measurement-inputs-grid">
+                    <div class="measurement-field">
+                      <label>Chest</label>
+                      <input type="number" step="0.5" id="new-m-chest" placeholder="40.0">
+                    </div>
+                    <div class="measurement-field">
+                      <label>Waist</label>
+                      <input type="number" step="0.5" id="new-m-waist" placeholder="34.0">
+                    </div>
+                    <div class="measurement-field">
+                      <label>Hips</label>
+                      <input type="number" step="0.5" id="new-m-hips" placeholder="41.0">
+                    </div>
+                    <div class="measurement-field">
+                      <label>Shoulder</label>
+                      <input type="number" step="0.5" id="new-m-shoulder" placeholder="18.5">
+                    </div>
+                    <div class="measurement-field">
+                      <label>Sleeve</label>
+                      <input type="number" step="0.5" id="new-m-sleeve" placeholder="25.5">
+                    </div>
+                    <div class="measurement-field">
+                      <label>Inseam</label>
+                      <input type="number" step="0.5" id="new-m-inseam" placeholder="32.0">
+                    </div>
+                    <div class="measurement-field">
+                      <label>Neck</label>
+                      <input type="number" step="0.5" id="new-m-neck" placeholder="16.0">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Customization Instructions -->
+            <div>
+              <div class="config-section-title">
+                <span>5. Tailoring Notes & Monogram</span>
+              </div>
+              <textarea id="customizer-instructions" rows="2" placeholder="e.g. Monogram 'DS' on inner chest pocket in cursive gold; peak lapels; double back vent; working sleeve buttonholes."></textarea>
+              <div class="suggestion-tags-row">
+                <span class="suggestion-tag">Add Monogram Initials</span>
+                <span class="suggestion-tag">Double Back Vent</span>
+                <span class="suggestion-tag">Working Cuff Buttons</span>
+                <span class="suggestion-tag">Pick Stitching</span>
+                <span class="suggestion-tag">Extra Slim Torso Taper</span>
+                <span class="suggestion-tag">High Waistband</span>
+              </div>
+            </div>
+
+            <!-- Quantity & Actions -->
+            <div class="action-quantity-row">
+              <div class="quantity-stepper">
+                <button type="button" class="qty-btn" id="qty-minus">-</button>
+                <span class="qty-display" id="qty-value">1</span>
+                <button type="button" class="qty-btn" id="qty-plus">+</button>
+              </div>
+
+              <div style="flex: 1; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <span style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; display: block;">Total:</span>
+                  <span style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 700; color: var(--gold-light);" id="customizer-subtotal-price">₹0.00</span>
+                </div>
+                <button type="button" class="btn-primary" id="btn-add-to-cart">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  <span>Add to Bespoke Cart</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       OFFCANVAS SHOPPING CART DRAWER
+       ========================================================================== -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <h3 class="cart-drawer-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span>Your Bespoke Cart</span>
+      </h3>
+      <button class="modal-close-btn" id="cart-drawer-close" aria-label="Close Cart">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Cart Items Container -->
+    <div class="cart-drawer-body" id="cart-items-container"></div>
+
+    <!-- Cart Footer & Checkout Action -->
+    <div class="cart-drawer-footer">
+      <div class="cart-summary-line">
+        <span>Bespoke Tailoring & Consultation</span>
+        <span style="color: var(--accent-success); font-weight: 600;">Complimentary</span>
+      </div>
+      <div class="cart-summary-line">
+        <span>Estimated Handcrafted Dispatch</span>
+        <span>7 - 10 Business Days</span>
+      </div>
+      <div class="cart-summary-line cart-grand-total">
+        <span>Total Amount</span>
+        <span id="cart-grand-total-price">₹0.00</span>
+      </div>
+      <button class="btn-primary" id="btn-proceed-checkout" style="width: 100%; justify-content: center;">
+        <span>Proceed to Bespoke Checkout</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+      <button class="btn-secondary" id="btn-clear-cart" style="width: 100%; justify-content: center; padding: 0.5rem; font-size: 0.82rem; border-color: transparent;">
+        Clear All Garments
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       CHECKOUT & ORDER PLACEMENT MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="checkout-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Bespoke Checkout</h2>
+        <button class="modal-close-btn" id="checkout-modal-close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Form Container -->
+        <div id="checkout-form-container">
+          <div class="checkout-steps-badge">
+            <span style="color: var(--gold-light); font-weight: 700;">Step 1:</span> Shipping Details &bull; 
+            <span style="color: var(--gold-light); font-weight: 700;">Step 2:</span> Payment Method
+          </div>
+
+          <!-- Items Summary -->
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.5rem;">
+            <div style="font-size: 0.78rem; text-transform: uppercase; color: var(--gold-light); margin-bottom: 0.5rem; font-weight: 600;">Order Items Summary</div>
+            <div id="checkout-items-summary"></div>
+            <div style="display: flex; justify-content: space-between; padding-top: 0.75rem; margin-top: 0.5rem; font-weight: 700;">
+              <span>Total Payable:</span>
+              <span id="checkout-total-price" style="color: var(--gold-light); font-family: var(--font-heading); font-size: 1.2rem;">₹0.00</span>
+            </div>
+          </div>
+
+          <!-- Checkout Form -->
+          <form id="form-checkout">
+            <div class="form-group">
+              <label for="checkout-customer-name">Recipient Name</label>
+              <input type="text" id="checkout-customer-name" readonly style="opacity: 0.8;">
+            </div>
+
+            <div class="form-group">
+              <label for="checkout-address">Delivery / Fitting Address *</label>
+              <textarea id="checkout-address" rows="2" placeholder="Street address, city, state, postal code" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="checkout-phone">Contact Telephone Number *</label>
+              <input type="tel" id="checkout-phone" placeholder="+1 (555) 018-7711" required>
+            </div>
+
+            <div class="form-group">
+              <label for="checkout-notes">Special Instructions for Master Tailor / Courier</label>
+              <textarea id="checkout-notes" rows="2" placeholder="e.g. Call before delivery, buzzer code 402, extra fitting consultation requested."></textarea>
+            </div>
+
+            <!-- Payment Method Selection -->
+            <label style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">
+              Payment Method
+            </label>
+            <div class="payment-methods-grid">
+              <div class="payment-method-card selected" data-method="card">
+                <div style="font-size: 1.25rem;">💳</div>
+                <div class="payment-method-name">Black Card</div>
+              </div>
+              <div class="payment-method-card" data-method="apple">
+                <div style="font-size: 1.25rem;"></div>
+                <div class="payment-method-name">Apple Pay</div>
+              </div>
+              <div class="payment-method-card" data-method="fitting">
+                <div style="font-size: 1.25rem;">👔</div>
+                <div class="payment-method-name">Pay at Fitting</div>
+              </div>
+            </div>
+
+            <!-- Bespoke Credit Card Preview Mockup -->
+            <div id="card-preview-container">
+              <div class="bespoke-credit-card-preview">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div class="card-preview-chip"></div>
+                  <span style="font-family: var(--font-heading); font-size: 0.85rem; color: var(--gold-light); letter-spacing: 0.1em;">ATELIER BESPOKE</span>
+                </div>
+                <div class="card-preview-number">•••• •••• •••• 8842</div>
+                <div class="card-preview-meta">
+                  <div>
+                    <span>CARDHOLDER</span><br>
+                    <strong style="color: var(--text-main);">VALUED PATRON</strong>
+                  </div>
+                  <div>
+                    <span>EXPIRES</span><br>
+                    <strong style="color: var(--text-main);">12/29</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary" id="btn-confirm-order" style="width: 100%; justify-content: center; padding: 1rem; margin-top: 1rem;">
+              <span>Confirm & Place Bespoke Order</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Success Screen -->
+        <div id="checkout-success-container" style="display: none;" class="order-success-screen">
+          <div class="success-icon-badge">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h3 style="font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 0.5rem;">Bespoke Order Confirmed</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">Your custom clothing order has been transmitted to our master atelier.</p>
+
+          <div class="success-tracking-callout">
+            <span style="font-size: 0.76rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; display: block;">Your Tracking Number</span>
+            <span style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; color: var(--gold-light);" id="success-tracking-number">CCO-2026-XXXX</span>
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed var(--border-light);">
+              <span>Total: <strong id="success-order-amount">₹0.00</strong></span>
+              <span>Estimated Delivery: <strong id="success-delivery-date" style="color: var(--gold-light);">7-10 Days</strong></span>
+            </div>
+          </div>
+
+          <button class="btn-primary" id="btn-track-new-order" style="width: 100%; justify-content: center; margin-top: 1rem;">
+            <span>Track This Order Now</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       AUTHENTICATION MODAL (LOGIN / REGISTER)
+       ========================================================================== -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Atelier Patron Portal</h2>
+        <button class="modal-close-btn" id="auth-modal-close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="auth-tabs-nav">
+          <button class="auth-tab-btn active" id="tab-btn-login">Sign In</button>
+          <button class="auth-tab-btn" id="tab-btn-register">Create Account</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-tab-content">
+          <form id="form-login">
+            <div class="form-group">
+              <label for="login-email">Email Address</label>
+              <input type="email" id="login-email" placeholder="name@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+              <span>Sign In to Atelier</span>
+            </button>
+          </form>
+
+          <!-- Quick Role Demonstration Logins -->
+          <div class="demo-account-box">
+            <span class="demo-account-header">Quick Role Demonstration Logins</span>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+              Select any role below to authenticate instantly with seeded demo accounts:
+            </p>
+            <div class="demo-roles-grid">
+              <div class="demo-role-card" onclick="App.loginAsDemo('customer')">
+                <span class="demo-role-icon">👔</span>
+                <div>
+                  <div class="demo-role-title">David Sterling</div>
+                  <div class="demo-role-desc">Customer (Patron)</div>
+                </div>
+              </div>
+              <div class="demo-role-card" onclick="App.loginAsDemo('admin')">
+                <span class="demo-role-icon">👑</span>
+                <div>
+                  <div class="demo-role-title">Alexander Wright</div>
+                  <div class="demo-role-desc">Atelier Administrator</div>
+                </div>
+              </div>
+              <div class="demo-role-card" onclick="App.loginAsDemo('tailor-marcus')">
+                <span class="demo-role-icon">✂️</span>
+                <div>
+                  <div class="demo-role-title">Marcus Vance</div>
+                  <div class="demo-role-desc">Master Tailor (Bay 1)</div>
+                </div>
+              </div>
+              <div class="demo-role-card" onclick="App.loginAsDemo('tailor-elena')">
+                <span class="demo-role-icon">🪡</span>
+                <div>
+                  <div class="demo-role-title">Elena Rostova</div>
+                  <div class="demo-role-desc">Master Tailor (Bay 2)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-tab-content" style="display: none;">
+          <form id="form-register">
+            <div class="form-group">
+              <label for="reg-name">Full Name *</label>
+              <input type="text" id="reg-name" placeholder="e.g. Lord David Sterling" required>
+            </div>
+            <div class="form-group">
+              <label for="reg-email">Email Address *</label>
+              <input type="email" id="reg-email" placeholder="name@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="reg-password">Password (min 6 characters) *</label>
+              <input type="password" id="reg-password" placeholder="••••••••" minlength="6" required>
+            </div>
+            <div class="form-group">
+              <label for="reg-phone">Phone Number</label>
+              <input type="tel" id="reg-phone" placeholder="+1 (555) 018-7711">
+            </div>
+            <div class="form-group">
+              <label for="reg-address">Default Delivery Address</label>
+              <textarea id="reg-address" rows="2" placeholder="742 Evergreen Terrace, Springfield"></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+              <span>Create Patron Account</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MEASUREMENT PROFILES MANAGEMENT MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="measurements-modal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <div>
+          <span class="section-tag">Bespoke Fit Registry</span>
+          <h2 class="modal-title">My Measurement Profiles</h2>
+        </div>
+        <button class="modal-close-btn" id="measurement-modal-close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="measurements-header-row">
+          <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 500px;">
+            Save multiple anatomical fit profiles (e.g. Formal Slim Fit, Relaxed Linen Fit) for instantaneous precision tailoring on any garment.
+          </p>
+          <button class="btn-primary" id="btn-add-measurement-profile">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>New Fit Profile</span>
+          </button>
+        </div>
+
+        <div class="measurements-grid" id="measurements-cards-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       CREATE NEW MEASUREMENT MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="new-measurement-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">New Measurement Profile</h2>
+        <button class="modal-close-btn" id="new-measurement-modal-close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form id="form-new-measurement">
+          <div class="form-group">
+            <label for="modal-m-name">Profile Name *</label>
+            <input type="text" id="modal-m-name" placeholder="e.g. David's Executive Fit" required>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--gold-light);">Dimensions</span>
+            <select id="modal-m-unit" style="width: auto; padding: 0.3rem 0.75rem; font-size: 0.82rem;">
+              <option value="inches">Inches (in)</option>
+              <option value="cm">Centimeters (cm)</option>
+            </select>
+          </div>
+
+          <div class="measurement-inputs-grid" style="margin-bottom: 1.25rem;">
+            <div class="measurement-field">
+              <label>Chest</label>
+              <input type="number" step="0.5" id="modal-m-chest" placeholder="41.5">
+            </div>
+            <div class="measurement-field">
+              <label>Waist</label>
+              <input type="number" step="0.5" id="modal-m-waist" placeholder="34.0">
+            </div>
+            <div class="measurement-field">
+              <label>Hips</label>
+              <input type="number" step="0.5" id="modal-m-hips" placeholder="41.0">
+            </div>
+            <div class="measurement-field">
+              <label>Shoulder</label>
+              <input type="number" step="0.5" id="modal-m-shoulder" placeholder="18.5">
+            </div>
+            <div class="measurement-field">
+              <label>Sleeve</label>
+              <input type="number" step="0.5" id="modal-m-sleeve" placeholder="25.5">
+            </div>
+            <div class="measurement-field">
+              <label>Shirt Length</label>
+              <input type="number" step="0.5" id="modal-m-shirt" placeholder="30.5">
+            </div>
+            <div class="measurement-field">
+              <label>Inseam</label>
+              <input type="number" step="0.5" id="modal-m-inseam" placeholder="32.0">
+            </div>
+            <div class="measurement-field">
+              <label>Neck</label>
+              <input type="number" step="0.5" id="modal-m-neck" placeholder="16.0">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="modal-m-notes">Fitting Notes / Posture Preferences</label>
+            <textarea id="modal-m-notes" rows="2" placeholder="e.g. Athletic chest taper, slight break on trousers, lower shoulder slope."></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+            <span>Save Fit Profile to Atelier</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MEASUREMENT GUIDE MODAL
+       ========================================================================== -->
+  <div class="modal-overlay" id="measurement-guide-modal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <div>
+          <span class="section-tag">Master Tailor Advice</span>
+          <h2 class="modal-title">How To Take Your Measurements</h2>
+        </div>
+        <button class="modal-close-btn" id="measurement-guide-close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+          <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <h4 style="color: var(--gold-light); margin-bottom: 0.5rem; font-family: var(--font-heading);">1. Chest / Bust</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.55;">
+              Wrap the measuring tape horizontally around the fullest part of your chest, keeping the tape level under your armpits and across your shoulder blades.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <h4 style="color: var(--gold-light); margin-bottom: 0.5rem; font-family: var(--font-heading);">2. Natural Waist</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.55;">
+              Measure around your natural waistline, typically located roughly 1 inch above your belly button. Keep one finger between the tape and your body for breathing comfort.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <h4 style="color: var(--gold-light); margin-bottom: 0.5rem; font-family: var(--font-heading);">3. Shoulder Width</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.55;">
+              Measure across the curve of your upper back from the tip of your left shoulder bone straight across to the right shoulder bone.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <h4 style="color: var(--gold-light); margin-bottom: 0.5rem; font-family: var(--font-heading);">4. Sleeve Length</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.55;">
+              With arm slightly bent at the elbow, measure from the point of your shoulder down along the outer arm to just past your wrist bone.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <h4 style="color: var(--gold-light); margin-bottom: 0.5rem; font-family: var(--font-heading);">5. Trouser Inseam</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.55;">
+              Measure along the inside of your leg from the crotch point down to the top of your shoe heel where you want the trouser hem to break.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-card); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+            <h4 style="color: var(--gold-light); margin-bottom: 0.5rem; font-family: var(--font-heading);">6. Neck Collar</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.55;">
+              Measure around the base of your neck where a shirt collar rests, inserting two fingers under the tape to guarantee a comfortable bespoke closure.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       PRODUCT MANAGEMENT MODAL (ADMIN ADD/EDIT)
+       ========================================================================== -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 class="modal-title" id="product-modal-title">Add New Bespoke Garment</h2>
+        <button class="modal-close-btn" onclick="App.closeModal('product-modal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="form-manage-product" onsubmit="App.handleSaveProduct(event)">
+          <input type="hidden" id="prod-form-id">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="prod-form-name">Garment Title *</label>
+              <input type="text" id="prod-form-name" placeholder="e.g. Royal Cashmere Double-Breasted Trench" required>
+            </div>
+            <div class="form-group">
+              <label for="prod-form-category">Category *</label>
+              <select id="prod-form-category" class="portal-select" style="width: 100%; height: 42px;" required></select>
+            </div>
+            <div class="form-group">
+              <label for="prod-form-price">Base Price in INR (₹) *</label>
+              <input type="number" step="0.01" min="1" id="prod-form-price" placeholder="e.g. 24999.00" required>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="prod-form-image">Garment Imagery URL *</label>
+              <input type="url" id="prod-form-image" placeholder="https://images.unsplash.com/..." required oninput="document.getElementById('prod-form-preview-img').src=this.value">
+              <div style="margin-top: 0.5rem; display: flex; align-items: center; gap: 1rem;">
+                <img id="prod-form-preview-img" src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=400&q=80" style="width: 60px; height: 75px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border-light);" onerror="this.src='https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=400&q=80'">
+                <span style="font-size: 0.78rem; color: var(--text-dim);">Live preview of catalog display image</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="prod-form-sizes">Available Sizes / Cuts (comma separated) *</label>
+              <input type="text" id="prod-form-sizes" placeholder="38R, 40R, 42R, Custom Made-to-Measure" required>
+            </div>
+            <div class="form-group">
+              <label for="prod-form-colors">Available Colorways (comma separated) *</label>
+              <input type="text" id="prod-form-colors" placeholder="Midnight Navy, Charcoal Grey, Obsidian Black" required>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="prod-form-fabrics">Available Luxury Fabrics (comma separated) *</label>
+              <input type="text" id="prod-form-fabrics" placeholder="Super 130s Merino Wool, Cashmere Blend, Silk Jacquard" required>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="prod-form-desc">Sartorial Description & Tailoring Notes</label>
+              <textarea id="prod-form-desc" rows="3" placeholder="Craftsmanship details, cloth origin, shoulder canvassing..."></textarea>
+            </div>
+            <div class="form-group" style="grid-column: span 2; display: flex; align-items: center; gap: 0.5rem;">
+              <input type="checkbox" id="prod-form-active" checked style="width: auto;">
+              <label for="prod-form-active" style="margin-bottom: 0; cursor: pointer;">Garment is Active and Available in Catalog</label>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-light);">
+            <button type="button" class="btn-secondary" onclick="App.closeModal('product-modal')">Cancel</button>
+            <button type="submit" class="btn-primary" id="btn-save-product">Save Garment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       CUSTOMER DETAILS & FIT PROFILE INSPECTOR MODAL (ADMIN)
+       ========================================================================== -->
+  <div class="modal-overlay" id="customer-details-modal">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <div>
+          <span class="section-tag">Patron Dossier</span>
+          <h2 class="modal-title" id="cust-modal-name">Patron Details</h2>
+        </div>
+        <button class="modal-close-btn" onclick="App.closeModal('customer-details-modal')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; background: rgba(255,255,255,0.02); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-light); margin-bottom: 1.5rem;">
+          <div>
+            <span style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">Email</span>
+            <div id="cust-modal-email" style="font-weight: 600; color: var(--text-main); margin-top: 2px;"></div>
+          </div>
+          <div>
+            <span style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">Phone</span>
+            <div id="cust-modal-phone" style="font-weight: 600; color: var(--text-main); margin-top: 2px;"></div>
+          </div>
+          <div>
+            <span style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">Default Address</span>
+            <div id="cust-modal-address" style="color: var(--text-muted); font-size: 0.88rem; margin-top: 2px;"></div>
+          </div>
+        </div>
+
+        <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 0.75rem;">Saved Anatomical Measurements</h4>
+        <div id="cust-modal-measurements-container" style="margin-bottom: 1.5rem;"></div>
+
+        <h4 style="font-family: var(--font-heading); color: var(--gold-light); margin-bottom: 0.75rem;">Bespoke Order History</h4>
+        <div id="cust-modal-orders-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ==========================================================================
+       SITE FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand-logo" style="margin-bottom: 1rem;">
+            <div class="brand-logo-icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="6" cy="6" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="6" cy="18" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="20" y1="4" x2="8.12" y2="15.88" stroke="currentColor" stroke-width="2"/>
+                <line x1="14.47" y1="14.48" x2="20" y2="20" stroke="currentColor" stroke-width="2"/>
+                <line x1="8.12" y1="8.12" x2="12" y2="12" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <span class="brand-title">ATELIER BESPOKE</span>
+          </div>
+          <p class="footer-brand-desc">
+            Handcrafted sartorial elegance combining heritage Savile Row tailoring with modern digital bespoke ordering. Guaranteed perfect fit on every piece.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Collections</h4>
+          <ul class="footer-links">
+            <li><a href="#collections" class="footer-link">Suits & Tuxedos</a></li>
+            <li><a href="#collections" class="footer-link">Bespoke Dress Shirts</a></li>
+            <li><a href="#collections" class="footer-link">Sartorial Trousers</a></li>
+            <li><a href="#collections" class="footer-link">Camel & Tweed Blazers</a></li>
+            <li><a href="#collections" class="footer-link">Silk Sherwanis & Gowns</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Patron Services</h4>
+          <ul class="footer-links">
+            <li><a href="#tracking-section" class="footer-link">Live Order Tracking</a></li>
+            <li><a href="javascript:void(0)" onclick="App.openMeasurementsModal()" class="footer-link">My Fit Profiles</a></li>
+            <li><a href="javascript:void(0)" onclick="App.openModal('measurement-guide-modal')" class="footer-link">Measurement Guide</a></li>
+            <li><a href="javascript:void(0)" onclick="App.openAuthModal('login')" class="footer-link">Account Access</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Atelier HQ</h4>
+          <ul class="footer-links">
+            <li class="footer-link" style="color: var(--text-muted);">14 Savile Row, Mayfair, London</li>
+            <li class="footer-link" style="color: var(--text-muted);">Workshop Bay 1 & 2</li>
+            <li class="footer-link" style="color: var(--gold-light);">Spring Boot REST Powered</li>
+            <li class="footer-link" style="color: var(--accent-success);">Status: Systems Operational</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; 2026 Atelier Bespoke Clothing Ordering System. All rights reserved.</span>
+        <span>Connected to Spring Boot API &bull; MySQL Database Backend</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script Inclusions -->
+  <script src="js/api.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
